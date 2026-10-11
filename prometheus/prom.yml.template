@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'terralink'
+    metrics_path: '/metrics'
+    scheme: 'https'
+    authorization:
+      type: Bearer
+      credentials: '${TERRALINK_METRICS_TOKEN}'
+    static_configs:
+      - targets: ['${TERRALINK_DOMAIN}']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['${POSTGRES_EXPORTER_HOST}']
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['${REDIS_EXPORTER_HOST}']

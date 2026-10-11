@@ -2,8 +2,15 @@ ARG VERSION=v3.2.1
 
 FROM prom/prometheus:${VERSION}
 
-# Copy the prom.yml configuration file to the container
-COPY prom.yml /etc/prometheus/prom.yml
+USER root
+# envsubst is needed to inject Railway environment variables into prom.yml.
+RUN apk add --no-cache gettext
 
-# Command to run Prometheus
-CMD ["--config.file=/etc/prometheus/prom.yml", "--storage.tsdb.path=/prometheus"]
+COPY prom.yml.template /etc/prometheus/prom.yml.template
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+USER nobody
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD []
