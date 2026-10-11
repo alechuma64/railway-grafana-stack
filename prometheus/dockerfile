@@ -3,8 +3,6 @@ ARG VERSION=v3.2.1
 FROM prom/prometheus:${VERSION}
 
 USER root
-# envsubst is needed to inject Railway environment variables into prom.yml.
-RUN apk add --no-cache gettext
 
 COPY prom.yml.template /etc/prometheus/prom.yml.template
 COPY entrypoint.sh /entrypoint.sh
